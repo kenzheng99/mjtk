@@ -1,6 +1,7 @@
 mjtk
 
 Session.vim
+output.log
 .DS_Store
 .idea/
 .vscode/

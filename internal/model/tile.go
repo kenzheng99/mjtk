@@ -1,6 +1,7 @@
 package model
 
 import (
+	"cmp"
 	"fmt"
 	"strconv"
 )
@@ -67,6 +68,58 @@ func (t Tile) IsHonor() bool {
 	return t.Suit == 'w' || t.Suit == 'd'
 }
 
+func (t Tile) Next() Tile {
+	if t.IsHonor() { // honor
+		return Tile{}
+	}
+
+	if t.Value >= 9 { // terminal
+		return Tile{}
+	}
+
+	if t.Value == 0 { // aka
+		return Tile{
+			Suit:  t.Suit,
+			Value: 6,
+		}
+	}
+
+	// regular
+	return Tile{
+		Suit:  t.Suit,
+		Value: t.Value + 1,
+	}
+}
+
+func (t Tile) NextWrap() Tile {
+	if t.IsHonor() {
+		if t.Suit == 'd' { // dragons
+			return Tile{
+				Suit:  t.Suit,
+				Value: ((t.Value-5)+1)%3 + 5,
+			}
+		}
+		// winds
+		return Tile{
+			Suit:  t.Suit,
+			Value: (t.Value + 1) % 4,
+		}
+	}
+
+	if t.Value == 0 { // aka
+		return Tile{
+			Suit:  t.Suit,
+			Value: 6,
+		}
+	}
+
+	// regular
+	return Tile{
+		Suit:  t.Suit,
+		Value: (t.Value % 9) + 1,
+	}
+}
+
 func (t Tile) String() string {
 	var value string
 	if t.IsHonor() {
@@ -94,6 +147,39 @@ func (t Tile) String() string {
 	return fmt.Sprintf("%s%c", value, t.Suit)
 }
 
+// gets tile numeric value. aka returns 5
+func (t Tile) FaceValue() int {
+	if t.Value == 0 {
+		return 5
+	}
+	return t.Value
+}
+
+// equals ignores aka
+func (t Tile) Equals(o Tile) bool {
+	return t.Suit == o.Suit && t.FaceValue() == o.FaceValue()
+}
+
+func (t Tile) IsTerminal() bool {
+	return (t.Suit == 'm' || t.Suit == 'p' || t.Suit == 's') && (t.Value == 1 || t.Value == 9)
+}
+
 func ErrInvalidTile(s string) error {
 	return fmt.Errorf("invalid tile: %q", s)
+}
+
+func CmpTile(a, b Tile) int {
+	suitSortOrder := map[byte]int{
+		'm': 1,
+		'p': 2,
+		's': 3,
+		'w': 4,
+		'd': 5,
+	}
+
+	if a.Suit == b.Suit {
+		return cmp.Compare(a.FaceValue(), b.FaceValue())
+	}
+
+	return cmp.Compare(suitSortOrder[a.Suit], suitSortOrder[b.Suit])
 }

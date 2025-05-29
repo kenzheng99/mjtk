@@ -6,14 +6,7 @@ type HandState struct {
 	IsIppatsu bool
 	IsTsumo   bool
 	IsRon     bool
-	IsClosed  bool
-	IsTenpai  bool
-
-	IsDoubleRiichi bool
-	IsHaitei       bool
-	IsHoutei       bool
-	IsRinshan      bool
-	IsChankan      bool
+	IsOpen    bool
 }
 
 func (hs HandState) String() string {
@@ -29,6 +22,9 @@ func (hs HandState) String() string {
 	}
 	if hs.IsTsumo {
 		str += "tsumo, "
+	}
+	if hs.IsRon {
+		str += "ron, "
 	}
 	if len(str) >= 0 {
 		str = str[:len(str)-2]
