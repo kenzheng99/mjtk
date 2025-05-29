@@ -33,6 +33,19 @@ func CreateHand(handStr string) (Hand, error) {
 	return hand, nil
 }
 
+func NewHandWithDraw(handStr string, drawStr string) (Hand, error) {
+	hand, err := CreateHand(handStr)
+	if err != nil {
+		return Hand{}, err
+	}
+
+	err = hand.Draw(drawStr)
+	if err != nil {
+		return Hand{}, err
+	}
+	return hand, nil
+}
+
 func (h Hand) String() string {
 	var handStr string
 	for _, tile := range h.Tiles {

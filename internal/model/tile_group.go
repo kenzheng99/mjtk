@@ -50,6 +50,15 @@ func (tg TileGroup) IsComplete() bool {
 	return tg.IsSequence() || tg.IsTriplet() || tg.IsQuad()
 }
 
+func (tg TileGroup) HasTerminal() bool {
+	for _, tile := range tg.Tiles {
+		if tile.IsTerminal() {
+			return true
+		}
+	}
+	return false
+}
+
 // ---------------
 // adding
 // ---------------
@@ -80,6 +89,45 @@ func (tg TileGroup) CanAddPair(t Tile) bool {
 
 func (tg *TileGroup) Add(t Tile) {
 	tg.Tiles = append(tg.Tiles, t)
+}
+
+// ---------
+// compare
+// ---------
+func (tg TileGroup) Equals(other TileGroup) bool {
+	if tg.Len() != other.Len() {
+		return false
+	}
+	for i := 0; i < tg.Len(); i++ {
+		if !tg.Tiles[i].Equals(other.Tiles[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+func (tg TileGroup) ValueEquals(other TileGroup) bool {
+	if tg.Len() != other.Len() {
+		return false
+	}
+	for i := 0; i < tg.Len(); i++ {
+		if tg.Tiles[i].FaceValue() != other.Tiles[i].FaceValue() {
+			return false
+		}
+	}
+	return true
+}
+
+func (tg TileGroup) SuitEquals(other TileGroup) bool {
+	if tg.Len() != other.Len() {
+		return false
+	}
+	for i := 0; i < tg.Len(); i++ {
+		if tg.Tiles[i].Suit != other.Tiles[i].Suit {
+			return false
+		}
+	}
+	return true
 }
 
 // ---------

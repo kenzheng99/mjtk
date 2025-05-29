@@ -164,6 +164,27 @@ func (t Tile) IsTerminal() bool {
 	return (t.Suit == 'm' || t.Suit == 'p' || t.Suit == 's') && (t.Value == 1 || t.Value == 9)
 }
 
+func (t Tile) IsDragon() bool {
+	return t.Suit == 'd'
+
+}
+
+func (t Tile) IsWhiteDragon() bool {
+	return t.Suit == 'd' && t.Value == 5
+}
+
+func (t Tile) IsGreenDragon() bool {
+	return t.Suit == 'd' && t.Value == 6
+}
+
+func (t Tile) IsRedDragon() bool {
+	return t.Suit == 'd' && t.Value == 7
+}
+
+func (t Tile) IsWind(windIndex int) bool {
+	return t.Suit == 'w' && t.Value == windIndex
+}
+
 func ErrInvalidTile(s string) error {
 	return fmt.Errorf("invalid tile: %q", s)
 }
@@ -176,10 +197,8 @@ func CmpTile(a, b Tile) int {
 		'w': 4,
 		'd': 5,
 	}
-
 	if a.Suit == b.Suit {
 		return cmp.Compare(a.FaceValue(), b.FaceValue())
 	}
-
 	return cmp.Compare(suitSortOrder[a.Suit], suitSortOrder[b.Suit])
 }

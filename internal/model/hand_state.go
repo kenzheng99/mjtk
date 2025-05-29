@@ -7,6 +7,7 @@ type HandState struct {
 	IsTsumo   bool
 	IsRon     bool
 	IsOpen    bool
+	SeatWind  int
 }
 
 func (hs HandState) String() string {
