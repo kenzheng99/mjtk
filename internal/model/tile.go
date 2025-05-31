@@ -185,6 +185,20 @@ func (t Tile) IsWind(windIndex int) bool {
 	return t.Suit == 'w' && t.Value == windIndex
 }
 
+func (t Tile) IsAka() bool {
+	return t.Value == 0
+}
+
+func (t Tile) RemoveAka() Tile {
+	if !t.IsAka() {
+		return t
+	}
+	return Tile{
+		Suit:  t.Suit,
+		Value: 5,
+	}
+}
+
 func ErrInvalidTile(s string) error {
 	return fmt.Errorf("invalid tile: %q", s)
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/kenzheng99/mjtk/internal/model"
+	"github.com/kenzheng99/mjtk/internal/scorer"
 )
 
 func main() {
@@ -22,11 +23,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	uraIndicator, err := model.CreateTile("9p")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	gameState := model.GameState{
 		PrevalentWind:  1,
 		Round:          1,
 		Honba:          0,
 		DoraIndicators: []model.Tile{doraIndicator},
+		UraIndicators:  []model.Tile{uraIndicator},
 	}
 	fmt.Println(gameState)
 
@@ -40,7 +47,7 @@ func main() {
 	// hand, err := model.NewHandWithDraw("1p1p1p9p9p9p9s9s9sWdWdEwEw", "Ew")
 	// hand, err := model.NewHandWithDraw("RdRdRdGdGdGdWdWd7p8p9p1p2p", "3p")
 	// hand, err := model.NewHandWithDraw("NwNwNw1p2p3p4p5p6p7p8pGdGd", "9p")
-	hand, err := model.NewHandWithDraw("1p1p1p2p2p2p3p3p3p4p4p5p5p", "5p")
+	hand, err := model.NewHandWithDraw("1p1p1p2p2p2p3p3p3p4p4p0p5p", "5p")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,6 +62,20 @@ func main() {
 		fmt.Println()
 		fmt.Println(ph)
 		fmt.Println(ph.WaitTypes())
-		fmt.Println("Yaku: ", model.CalculateYaku(ph, gameState))
+
+		yakus := model.CalculateYaku(ph, gameState)
+		fmt.Println("Yaku: ", yakus)
+
+		han, err := scorer.ScoreYaku(ph, yakus)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Score: %d han\n", han)
+
+		doraCounts, err := scorer.ScoreDora(ph, gameState)
+		fmt.Printf("Dora: dora %d, ura %d, aka %d\n",
+			doraCounts.Dora,
+			doraCounts.Ura,
+			doraCounts.Aka)
 	}
 }
