@@ -70,12 +70,15 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Score: %d han\n", han)
 
 		doraCounts, err := scorer.ScoreDora(ph, gameState)
+
 		fmt.Printf("Dora: dora %d, ura %d, aka %d\n",
 			doraCounts.Dora,
 			doraCounts.Ura,
 			doraCounts.Aka)
+
+		han += doraCounts.Total()
+		fmt.Printf("Score: %d han\n", han)
 	}
 }

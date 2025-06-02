@@ -12,6 +12,10 @@ type DoraCounts struct {
 	Aka  int
 }
 
+func (dc DoraCounts) Total() int {
+	return dc.Dora + dc.Ura + dc.Aka
+}
+
 func ScoreDora(ph model.ParsedHand, gs model.GameState) (DoraCounts, error) {
 	if len(gs.DoraIndicators) == 0 {
 		return DoraCounts{}, errors.New("no dora indicator found in gamestate")
