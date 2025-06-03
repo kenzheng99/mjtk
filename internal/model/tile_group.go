@@ -6,7 +6,7 @@ import (
 
 type TileGroup struct {
 	Tiles  []Tile
-	isOpen bool
+	IsOpen bool
 }
 
 func (tg TileGroup) Sort() {
@@ -53,6 +53,15 @@ func (tg TileGroup) IsComplete() bool {
 func (tg TileGroup) HasTerminal() bool {
 	for _, tile := range tg.Tiles {
 		if tile.IsTerminal() {
+			return true
+		}
+	}
+	return false
+}
+
+func (tg TileGroup) HasHonor() bool {
+	for _, tile := range tg.Tiles {
+		if tile.IsHonor() {
 			return true
 		}
 	}

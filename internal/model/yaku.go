@@ -170,13 +170,23 @@ func CheckIipeikouRyanpeikou(yaku []YakuType, ph ParsedHand) []YakuType {
 }
 
 func CheckIitsu(yaku []YakuType, ph ParsedHand) []YakuType {
-	iitsu012 := ph.Groups[0].IsSequence() && ph.Groups[0].Tiles[0].FaceValue() == 1 &&
-		ph.Groups[1].IsSequence() && ph.Groups[1].Tiles[0].FaceValue() == 4 &&
-		ph.Groups[2].IsSequence() && ph.Groups[2].Tiles[0].FaceValue() == 7
+	iitsu012 := ph.Groups[0].IsSequence() &&
+		ph.Groups[0].Tiles[0].FaceValue() == 1 &&
+		ph.Groups[1].IsSequence() &&
+		ph.Groups[1].Tiles[0].FaceValue() == 4 &&
+		ph.Groups[2].IsSequence() &&
+		ph.Groups[2].Tiles[0].FaceValue() == 7 &&
+		ph.Groups[0].SuitEquals(ph.Groups[1]) &&
+		ph.Groups[1].SuitEquals(ph.Groups[2])
 
-	iitsu123 := ph.Groups[1].IsSequence() && ph.Groups[1].Tiles[0].FaceValue() == 1 &&
-		ph.Groups[2].IsSequence() && ph.Groups[2].Tiles[0].FaceValue() == 4 &&
-		ph.Groups[3].IsSequence() && ph.Groups[3].Tiles[0].FaceValue() == 7
+	iitsu123 := ph.Groups[1].IsSequence() &&
+		ph.Groups[1].Tiles[0].FaceValue() == 1 &&
+		ph.Groups[2].IsSequence() &&
+		ph.Groups[2].Tiles[0].FaceValue() == 4 &&
+		ph.Groups[3].IsSequence() &&
+		ph.Groups[3].Tiles[0].FaceValue() == 7 &&
+		ph.Groups[1].SuitEquals(ph.Groups[2]) &&
+		ph.Groups[2].SuitEquals(ph.Groups[3])
 
 	if iitsu012 || iitsu123 {
 		yaku = append(yaku, Iitsu)

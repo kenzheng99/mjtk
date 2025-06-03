@@ -47,7 +47,8 @@ func main() {
 	// hand, err := model.NewHandWithDraw("1p1p1p9p9p9p9s9s9sWdWdEwEw", "Ew")
 	// hand, err := model.NewHandWithDraw("RdRdRdGdGdGdWdWd7p8p9p1p2p", "3p")
 	// hand, err := model.NewHandWithDraw("NwNwNw1p2p3p4p5p6p7p8pGdGd", "9p")
-	hand, err := model.NewHandWithDraw("1p1p1p2p2p2p3p3p3p4p4p0p5p", "5p")
+	// hand, err := model.NewHandWithDraw("1p1p1p2p2p2p3p3p3p4p4p0p5p", "5p")
+	hand, err := model.NewHandWithDraw("6p6p6p2m3m4m4m5m6mEwEw5s7s", "6s")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -79,6 +80,8 @@ func main() {
 			doraCounts.Aka)
 
 		han += doraCounts.Total()
-		fmt.Printf("Score: %d han\n", han)
+		fu := scorer.ScoreFu(ph, gameState)
+
+		fmt.Printf("Score: %d han, %d fu\n", han, fu)
 	}
 }
