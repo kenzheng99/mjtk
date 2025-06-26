@@ -18,9 +18,9 @@ const (
 // if non-dealer tsumo, Payment1 = non-dealer payment, Payment2 = dealer payment
 // if dealer tsumo, Payment1 = Payment2 = non-dealer payment
 type HandScore struct {
-	Type     ScoreType
 	Payment1 int
 	Payment2 int
+	Type     ScoreType
 }
 
 func (hs HandScore) String() string {
@@ -53,6 +53,7 @@ func (t ScoreType) String() string {
 }
 
 func ScorePoints(han int, fu int, isTsumo bool, isDealer bool, honba int) (HandScore, error) {
+	// TODO han/fu validation
 	handScore := HandScore{}
 	basicPoints := 0
 	switch {
