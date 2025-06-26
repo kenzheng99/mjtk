@@ -35,7 +35,7 @@ var yakuHanClosed = map[model.YakuType]int{
 
 	model.Chanta:       2,
 	model.Sanshoku:     2,
-	model.Iitsu:        2,
+	model.Ittsu:        2,
 	model.DoubleRiichi: 2,
 	model.Chiitoi:      2,
 
@@ -49,7 +49,7 @@ var yakuHanClosed = map[model.YakuType]int{
 var yakuHanOpen = map[model.YakuType]int{
 	model.Chanta:   1,
 	model.Sanshoku: 1,
-	model.Iitsu:    1,
+	model.Ittsu:    1,
 
 	model.Honitsu: 2,
 	model.Junchan: 2,

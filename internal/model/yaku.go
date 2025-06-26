@@ -26,7 +26,7 @@ const (
 	// 2 han, 1 open
 	Chanta   YakuType = "chanta"
 	Sanshoku YakuType = "sanshoku"
-	Iitsu    YakuType = "iitsu"
+	Ittsu    YakuType = "ittsu"
 
 	// 2 han
 	DoubleRiichi   YakuType = "double riichi" // masks riichi
@@ -76,7 +76,7 @@ func CalculateYaku(ph ParsedHand, gs GameState) []YakuType {
 	yaku = CheckTanyao(yaku, ph)
 	yaku = CheckToitoiSanankou(yaku, ph)
 	yaku = CheckIipeikouRyanpeikou(yaku, ph)
-	yaku = CheckIitsu(yaku, ph)
+	yaku = CheckIttsu(yaku, ph)
 	yaku = CheckSanshoku(yaku, ph)
 	yaku = CheckChantaJunchanHonroutou(yaku, ph)
 	yaku = CheckHonitsuChinitsu(yaku, ph)
@@ -169,8 +169,8 @@ func CheckIipeikouRyanpeikou(yaku []YakuType, ph ParsedHand) []YakuType {
 	return yaku
 }
 
-func CheckIitsu(yaku []YakuType, ph ParsedHand) []YakuType {
-	iitsu012 := ph.Groups[0].IsSequence() &&
+func CheckIttsu(yaku []YakuType, ph ParsedHand) []YakuType {
+	ittsu012 := ph.Groups[0].IsSequence() &&
 		ph.Groups[0].Tiles[0].FaceValue() == 1 &&
 		ph.Groups[1].IsSequence() &&
 		ph.Groups[1].Tiles[0].FaceValue() == 4 &&
@@ -179,7 +179,7 @@ func CheckIitsu(yaku []YakuType, ph ParsedHand) []YakuType {
 		ph.Groups[0].SuitEquals(ph.Groups[1]) &&
 		ph.Groups[1].SuitEquals(ph.Groups[2])
 
-	iitsu123 := ph.Groups[1].IsSequence() &&
+	ittsu123 := ph.Groups[1].IsSequence() &&
 		ph.Groups[1].Tiles[0].FaceValue() == 1 &&
 		ph.Groups[2].IsSequence() &&
 		ph.Groups[2].Tiles[0].FaceValue() == 4 &&
@@ -188,8 +188,8 @@ func CheckIitsu(yaku []YakuType, ph ParsedHand) []YakuType {
 		ph.Groups[1].SuitEquals(ph.Groups[2]) &&
 		ph.Groups[2].SuitEquals(ph.Groups[3])
 
-	if iitsu012 || iitsu123 {
-		yaku = append(yaku, Iitsu)
+	if ittsu012 || ittsu123 {
+		yaku = append(yaku, Ittsu)
 	}
 	return yaku
 }
