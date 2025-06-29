@@ -53,7 +53,11 @@ func (t ScoreType) String() string {
 }
 
 func ScorePoints(han int, fu int, isTsumo bool, isDealer bool, honba int) (HandScore, error) {
-	// TODO han/fu validation
+	err := validateHanFu(han, fu, isTsumo)
+	if err != nil {
+		return HandScore{}, err
+	}
+
 	handScore := HandScore{}
 	basicPoints := 0
 	switch {
@@ -103,9 +107,37 @@ func ScorePoints(han int, fu int, isTsumo bool, isDealer bool, honba int) (HandS
 
 	handScore.Payment1 = roundUpToNearest100(handScore.Payment1)
 	handScore.Payment2 = roundUpToNearest100(handScore.Payment2)
+
+	// honba
+	if isTsumo {
+		handScore.Payment1 += 100 * honba
+		handScore.Payment2 += 100 * honba
+	} else {
+		handScore.Payment1 += 300 * honba
+	}
+
 	return handScore, nil
 }
 
 func roundUpToNearest100(n int) int {
 	return ((n + 99) / 100) * 100
+}
+
+func validateHanFu(han, fu int, isTsumo bool) error {
+	if han < 1 || (14 <= han && han <= 25) || han > 26 {
+		return fmt.Errorf("han must be between 1-13 or 26, got %d", han)
+	}
+	if fu < 20 || fu > 110 || (fu%10 != 0 && fu != 25) {
+		return fmt.Errorf("fu must be between 20-110 and divisible by 10 (except for 25), got %d", fu)
+	}
+	if fu == 20 && (!isTsumo || han == 1) {
+		return fmt.Errorf("invalid han/fu combination: %d han, %d fu", han, fu)
+	}
+	if fu == 25 && (han == 1 || (han == 2 && isTsumo)) {
+		return fmt.Errorf("invalid han/fu combination: %d han, %d fu, tsumo=%t", han, fu, isTsumo)
+	}
+	if fu == 110 && han == 1 {
+		return fmt.Errorf("invalid han/fu combination: %d han, %d fu", han, fu)
+	}
+	return nil
 }

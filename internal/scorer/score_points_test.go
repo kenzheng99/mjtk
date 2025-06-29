@@ -159,6 +159,12 @@ func TestScorePointsTable(t *testing.T) {
 		{"12han_30fu_dealer_tsumo", 12, 30, true, true, 0, HandScore{12000, 12000, ScoreSanbaiman}},
 		{"13han_30fu_dealer_tsumo", 13, 30, true, true, 0, HandScore{16000, 16000, ScoreYakuman}},
 		{"26han_30fu_dealer_tsumo", 26, 30, true, true, 0, HandScore{32000, 32000, ScoreDoubleYakuman}},
+
+		// honba cases
+		{"1han_30fu_ron_1honba", 1, 30, false, false, 1, HandScore{1300, 0, ScoreRegular}},
+		{"4han_40fu_tsumo_2honba", 4, 40, true, false, 2, HandScore{2200, 4200, ScoreMangan}},
+		{"3han_50fu_dealer_ron", 3, 50, false, true, 3, HandScore{10500, 0, ScoreRegular}},
+		{"4han_20fu_dealer_tsumo", 4, 20, true, true, 4, HandScore{3000, 3000, ScoreRegular}},
 	}
 
 	for _, tt := range tests {
@@ -179,5 +185,43 @@ func TestScorePointsTable(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestScorePointsErrors(t *testing.T) {
+	tests := []struct {
+		name    string
+		han     int
+		fu      int
+		isTsumo bool
+	}{
+		{"1han_20fu_ron", 1, 20, false},
+		{"1han_20fu_tsumo", 1, 20, true},
+		{"2han_20fu_ron", 2, 20, false},
+		{"3han_20fu_ron", 3, 20, false},
+		{"4han_20fu_ron", 3, 20, false},
+		{"1han_25fu_ron", 1, 25, false},
+		{"1han_25fu_tsumo", 1, 25, true},
+		{"2han_25fu_tsumo", 2, 25, true},
+		{"1han_110fu_tsumo", 1, 120, true},
+		{"<1 han", 0, 30, false},
+		{"14<han<26 low", 14, 30, false},
+		{"14<han<26 high", 25, 30, false},
+		{">26 han", 27, 30, false},
+		{"<20 fu", 3, 10, false},
+		{">110 fu", 2, 120, false},
+		{"non rounded fu", 2, 35, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			handScore, err := ScorePoints(tt.han, tt.fu, tt.isTsumo, true, 0)
+
+			if err == nil {
+				t.Errorf("expected error but got none, actual: %s", handScore)
+			}
+			if handScore != (HandScore{}) {
+				t.Errorf("expected empty HandScore but got: %s", handScore)
+			}
+		})
+	}
 }
